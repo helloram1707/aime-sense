@@ -112,7 +112,7 @@ export function DashboardHero() {
           />
           <View>
             <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 5 }}>
-              <Text style={{ color: '#0B2447', fontFamily: 'Inter_700Bold', fontSize: 20 }}>
+              <Text style={{ color: colors.foreground, fontFamily: 'Inter_700Bold', fontSize: 20 }}>
                 AIME
               </Text>
               <Text style={{ color: '#0D9488', fontFamily: 'Inter_700Bold', fontSize: 20 }}>
