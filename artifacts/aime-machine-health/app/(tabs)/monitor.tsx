@@ -1,4 +1,4 @@
-import { Accelerometer } from 'expo-sensors';
+import { Accelerometer } from '@/src/core/accelerometer';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
