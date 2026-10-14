@@ -37,7 +37,7 @@ export function Wordmark() {
       <BrandMark size={44} />
       <View>
         <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 4 }}>
-          <Text style={{ color: colors.foreground, fontFamily: 'Inter_700Bold', fontSize: 17, letterSpacing: 0.5 }}>
+          <Text style={{ color: '#38BDF8', fontFamily: 'Inter_700Bold', fontSize: 17, letterSpacing: 0.5 }}>
             AIME
           </Text>
           <Text style={{ color: '#0D9488', fontFamily: 'Inter_700Bold', fontSize: 17, letterSpacing: 0.5 }}>

@@ -80,12 +80,6 @@ export default function OverviewScreen() {
   // Check sensor availability on mount
   useEffect(() => {
     let current = true;
-    if (Platform.OS === 'web') {
-      setSensorAvailable(false);
-      return () => {
-        current = false;
-      };
-    }
     Accelerometer.isAvailableAsync()
       .then((available) => {
         if (current) setSensorAvailable(available);
@@ -266,9 +260,7 @@ export default function OverviewScreen() {
           <View style={{ flex: 1, gap: 5 }}>
             <SmallLabel>{t.deviceSensor}</SmallLabel>
             <Text style={{ color: colors.foreground, fontFamily: 'Inter_600SemiBold', fontSize: 15 }}>
-              {Platform.OS === 'web'
-                ? t.sensorAndroidOnly
-                : sensorAvailable === null
+              {sensorAvailable === null
                 ? 'Checking accelerometer…'
                 : sensorAvailable
                   ? t.sensorDetected
@@ -276,15 +268,15 @@ export default function OverviewScreen() {
             </Text>
           </View>
           <MaterialCommunityIcons
-            name={sensorAvailable && Platform.OS !== 'web' ? 'motion-sensor' : 'motion-sensor-off'}
+            name={sensorAvailable ? 'motion-sensor' : 'motion-sensor-off'}
             size={25}
-            color={sensorAvailable && Platform.OS !== 'web' ? colors.success : colors.mutedForeground}
+            color={sensorAvailable ? colors.success : colors.mutedForeground}
           />
         </View>
         <BodyText muted>
-          {Platform.OS === 'web'
-            ? 'Browser preview: Connect on Android for live sensor measurements. Test Lab provides reproducible simulated benchmarks.'
-            : 'Sensor availability confirmed. Readings are tagged LIVE_SENSOR only upon successful physical capture.'}
+          {sensorAvailable
+            ? 'Sensor availability confirmed. Readings are tagged LIVE_SENSOR only upon successful physical capture.'
+            : 'No accelerometer is available on this device or browser. Test Lab provides reproducible simulated benchmarks.'}
         </BodyText>
       </Panel>
 

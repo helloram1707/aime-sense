@@ -43,17 +43,36 @@ export default function HistoryScreen() {
     setNotice('');
     try {
       const content = buildHistoryCsv(records);
-      const file = new File(
-        Paths.cache,
-        `aime-history-${Date.now()}.csv`,
-      );
+      const fileName = `aime-history-${Date.now()}.csv`;
+
+      // Web (browser / WebView): the native File API does not exist here,
+      // so download the CSV through a Blob instead.
+      if (Platform.OS === 'web') {
+        const g = globalThis as any;
+        const blob = new g.Blob(['\uFEFF' + content], {
+          type: 'text/csv;charset=utf-8',
+        });
+        const url = g.URL.createObjectURL(blob);
+        const a = g.document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        g.document.body.appendChild(a);
+        a.click();
+        g.document.body.removeChild(a);
+        g.URL.revokeObjectURL(url);
+        setNotice(
+          `${records.length} observation windows exported as ${fileName}.`,
+        );
+        return;
+      }
+
+      // Native (Android / iOS)
+      const file = new File(Paths.cache, fileName);
+      if (file.exists) file.delete();
+      file.create();
       file.write(content);
       if (!(await Sharing.isAvailableAsync())) {
-        setNotice(
-          Platform.OS === 'web'
-            ? 'File sharing is not available in this browser preview. Use an Android device to export the CSV.'
-            : 'System file sharing is not available on this device.',
-        );
+        setNotice('System file sharing is not available on this device.');
         return;
       }
       await Sharing.shareAsync(file.uri, {

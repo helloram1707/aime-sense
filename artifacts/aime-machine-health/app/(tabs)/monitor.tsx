@@ -85,12 +85,6 @@ export default function MonitorScreen() {
 
   useEffect(() => {
     let current = true;
-    if (Platform.OS === 'web') {
-      setSensorAvailable(false);
-      return () => {
-        current = false;
-      };
-    }
     Accelerometer.isAvailableAsync()
       .then((available) => {
         if (current) setSensorAvailable(available);
@@ -167,13 +161,14 @@ export default function MonitorScreen() {
     setLastCapture(null);
     setReferenceConfirmed(false);
 
-    if (Platform.OS === 'web') {
-      setSensorAvailable(false);
-      setSensorError('The browser preview cannot access the phone accelerometer. Open this app on an Android phone to collect live readings.');
-      return;
-    }
-
     try {
+      if (Platform.OS === 'web') {
+        const permission = await Accelerometer.requestPermissionsAsync();
+        if (!permission.granted) {
+          setSensorError('Motion sensor permission was denied. Allow motion sensors for this site and try again.');
+          return;
+        }
+      }
       const available = await Accelerometer.isAvailableAsync();
       setSensorAvailable(available);
       if (!available) {
@@ -319,9 +314,7 @@ export default function MonitorScreen() {
           <View style={{ flex: 1, gap: 4 }}>
             <SmallLabel>ACCELEROMETER</SmallLabel>
             <Text style={{ color: colors.foreground, fontFamily: 'Inter_600SemiBold', fontSize: 15 }}>
-              {Platform.OS === 'web'
-                ? 'Open on Android for phone sensor'
-                : sensorAvailable === null
+              {sensorAvailable === null
                 ? 'Checking availability'
                 : sensorAvailable
                   ? 'Available on this device'

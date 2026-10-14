@@ -2,7 +2,7 @@ import { File } from 'expo-file-system';
 import * as DocumentPicker from 'expo-document-picker';
 import React, { useMemo, useState } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Pressable, Text, View } from 'react-native';
+import { Platform, Pressable, Text, View } from 'react-native';
 import {
   ActionButton,
   AppScreen,
@@ -130,12 +130,25 @@ export default function LabScreen() {
         multiple: false,
       });
       if (picked.canceled || !picked.assets?.[0]) {
-        setBusy(false);
         return;
       }
       const asset = picked.assets[0];
-      const file = new File(asset.uri);
-      const parsed = parseMeasurementCsv(await file.text());
+
+      // Web (browser / WebView): the native File API does not exist here,
+      // so read the picked file with the browser File object or fetch.
+      let rawText: string;
+      if (Platform.OS === 'web') {
+        const webFile = (asset as any).file;
+        rawText = webFile
+          ? await webFile.text()
+          : await (await fetch(asset.uri)).text();
+      } else {
+        rawText = await new File(asset.uri).text();
+      }
+      // Remove a UTF-8 byte-order mark if present (added by the web export).
+      const text = rawText.replace(/^\uFEFF/, '');
+
+      const parsed = parseMeasurementCsv(text);
       if (parsed.samples.length === 0) {
         setNotice(parsed.errors.join(' ') || 'No measurement rows were found in that file.');
         return;
