@@ -97,7 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Try backend registration first
     try {
-      const response = await fetch('http://10.111.120.9:3000/api/auth/register', {
+      const response = await fetch('https://aime-sense.onrender.com/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, workshop, password: input.password }),
@@ -163,7 +163,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Try backend sign-in first
     try {
-      const response = await fetch('http://10.111.120.9:3000/api/auth/login', {
+      const response = await fetch('https://aime-sense.onrender.com/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),

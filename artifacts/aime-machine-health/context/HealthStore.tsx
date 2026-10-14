@@ -347,7 +347,7 @@ export function HealthStoreProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const syncWithServer = useCallback(
-    async (apiUrl = 'http://10.111.120.9:3000', token?: string) => {
+    async (apiUrl = 'https://aime-sense.onrender.com', token?: string) => {
       if (!token) {
         setSyncStatus('OFFLINE_LOCAL');
         return false;
