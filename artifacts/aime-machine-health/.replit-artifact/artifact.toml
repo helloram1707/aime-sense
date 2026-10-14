@@ -1,0 +1,24 @@
+kind = "mobile"
+previewPath = "/"
+title = "AIME Machine Health"
+description = "An offline-first Android condition-monitoring app for small workshops. It captures accelerometer windows, validates measurement quality, establishes a transparent baseline, explains rule-based alerts, and keeps a local inspection history."
+version = "1.0.0"
+id = "artifacts/aime-machine-health"
+router = "expo-domain"
+
+[[services]]
+name = "expo"
+ensurePreviewReachable = "/status"
+paths = [ "/" ]
+localPort = 23120
+
+[services.development]
+run = "pnpm --filter @workspace/aime-machine-health run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/aime-machine-health", "run", "build" ]
+run = [ "pnpm", "--filter", "@workspace/aime-machine-health", "run", "serve" ]
+
+[services.env]
+PORT = "23120"
+BASE_PATH = "/"

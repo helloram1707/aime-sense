@@ -1,0 +1,12 @@
+{
+  "name": "aime-machine-health-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.26.1",
+  "scripts": {
+    "start": "pnpm --filter @workspace/aime-machine-health run start",
+    "serve": "pnpm --filter @workspace/aime-machine-health run serve",
+    "test": "pnpm --filter @workspace/aime-machine-health run test",
+    "typecheck": "pnpm --filter @workspace/aime-machine-health run typecheck"
+  }
+}
